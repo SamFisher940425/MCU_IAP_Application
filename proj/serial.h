@@ -18,15 +18,20 @@ public:
 
 
     //定时器相关定义
-    QTimer *myTime;
+    QTimer *myTimer0;
     void Timer0_Init();//定时器初始化
-    QTimer *newTime;
+    QTimer *myTimer1;
     void Timer1_Init();//定时器初始化
 
     CompilerPort compilerport;
     QStringList staticList ;
 
     void handleSerialError(QSerialPort::SerialPortError error);
+    void DataSendSlot(QByteArray data_array);//供外部调用发送的槽函数
+
+signals:
+    void iapWidgetOpen();
+    void DataRecvSignal(QByteArray data_array);//触发外部数据接收槽函数
 
 private slots:   
 
@@ -40,6 +45,10 @@ private slots:
     void on_textBrowser_textChanged();//文本框自动下拉
     void AutoClear();//自动清除
 
+    void on_checkBoxHexTx_stateChanged(int arg1);
+
+    void on_iapButton_clicked();
+
 private:
     /*---------------function---------------*/
 
@@ -48,6 +57,7 @@ private:
     void Serial_Connect_Success_Label_Text();//串口自动检测连接成功以后的信息
     void Serial_Connect_NG_Label_Text();//串口自动检测连接失败以后的信息
     QStringList scanSerial();//向box里写COMx
+    void validateHEX();
 
     /*---------------variable---------------*/
 

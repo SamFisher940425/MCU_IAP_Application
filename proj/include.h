@@ -6,9 +6,10 @@
 #include <QtSerialPort/QSerialPortInfo>
 #include <QTextCodec>
 #include <QTimer>
-#include <compilerport.h>
 #include <QMessageBox>
+#include "compilerport.h"
 #include "serial.h"
+#include "ota_widget.h"
 
 #include <QPainter>
 #include <QBitmap>

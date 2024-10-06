@@ -395,10 +395,10 @@ padding:0 1px;
     <widget class="QPushButton" name="sendTxtButton">
      <property name="geometry">
       <rect>
-       <x>190</x>
+       <x>175</x>
        <y>100</y>
-       <width>121</width>
-       <height>71</height>
+       <width>120</width>
+       <height>40</height>
       </rect>
      </property>
      <property name="font">
@@ -422,7 +422,7 @@ padding:0 1px;
        <x>0</x>
        <y>0</y>
        <width>341</width>
-       <height>101</height>
+       <height>81</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
@@ -507,8 +507,8 @@ padding:0 1px;
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>90</y>
-       <width>191</width>
+       <y>100</y>
+       <width>111</width>
        <height>91</height>
       </rect>
      </property>
@@ -539,7 +539,38 @@ padding:0 1px;
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QCheckBox" name="checkBoxHexTx">
+        <property name="text">
+         <string>十六进制发送</string>
+        </property>
+       </widget>
+      </item>
      </layout>
+    </widget>
+    <widget class="QPushButton" name="iapButton">
+     <property name="geometry">
+      <rect>
+       <x>175</x>
+       <y>150</y>
+       <width>120</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{background-color: rgb(225, 225, 225);border:1px groove gray;border-radius:4px;padding:8px 25px;border-style: outset;}
+                                       QPushButton:hover{background-color:rgb(229, 241, 251); color: black;}
+                                       QPushButton:pressed{background-color:rgb(204, 228, 247);border-style: inset;}</string>
+     </property>
+     <property name="text">
+      <string>IAP</string>
+     </property>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_3">

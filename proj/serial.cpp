@@ -28,6 +28,8 @@ void Serial::systemInit()
     globlePort.setStopBits(QSerialPort::OneStop);
     //端口设定
     ui->baudRateBox->setCurrentIndex(4);
+    ui->sendTxtButton->setEnabled(false);
+    ui->iapButton->setEnabled(false);
     //信号绑定到槽
     connect(ui->openButton,&QPushButton::clicked,this,&Serial::ButtonOpenPort);//打开串口信号
     connect(ui->sendTxtButton,&QPushButton::clicked,this,&Serial::ButtonSendPort);//发送文本信号
@@ -83,25 +85,32 @@ void Serial::AutoClear()
 {
     if(ui->checkBox->isChecked()==true)
     {
-        newTime->start();
+        myTimer1->start();
 
     }
     else if(ui->checkBox->isChecked()==false)
     {
-        newTime->stop();
+        myTimer1->stop();
     }
+}
+/*--------------------------
+ *      供外部调用的发送函数
+ * ------------------------*/
+void Serial::DataSendSlot(QByteArray data_array)
+{
+    globlePort.write(data_array);
 }
 /*----------------------------------------------------------
  *          定时器
  *----------------------------------------------------------*/
 void Serial::Timer0_Init()
 {
-    myTime = new QTimer();
-    myTime->stop();
-    myTime->setInterval(1000);//1ms定时器，类似于单片机的中断函数
-    connect(myTime,SIGNAL(timeout()),this,SLOT(Timer0_Task()));
+    myTimer0 = new QTimer();
+    myTimer0->stop();
+    myTimer0->setInterval(1000);//1ms定时器，类似于单片机的中断函数
+    connect(myTimer0,SIGNAL(timeout()),this,SLOT(Timer0_Task()));
     //当记满1000时执行Timer0_Task
-    myTime->start();
+    myTimer0->start();
 }
 void Serial::Timer0_Task()
 {
@@ -109,40 +118,16 @@ void Serial::Timer0_Task()
 }
 void Serial::Timer1_Init()
 {
-    newTime = new QTimer();
-    newTime->stop();
-    newTime->setInterval(4000);//1ms定时器，类似于单片机的中断函数
-    connect(newTime,SIGNAL(timeout()),this,SLOT(Timer1_Task()));
+    myTimer1 = new QTimer();
+    myTimer1->stop();
+    myTimer1->setInterval(4000);//1ms定时器，类似于单片机的中断函数
+    connect(myTimer1,SIGNAL(timeout()),this,SLOT(Timer1_Task()));
     //当记满100时执行Timer1_Task
 }
 void Serial::Timer1_Task()
 {    
     qDebug()<<"定时器1";
     ui->textBrowser->clear();
-    /*
-    qDebug()<<"定时器1";
-    int z = 0;
-    for(int i = 0; i < ui->portBox->count();i++)
-    {
-        for(int j = 0; j < ui->portBox->count();j++)
-        {
-            qDebug()<<"portname:"<<globlePort.portName();
-            if(ui->portBox->itemText(j) == globlePort.portName())
-            {
-                z++;
-            }
-
-            //盒子里的和链表的不一样
-        }
-        if(z == 0)
-        {
-            ui->portBox->removeItem(i);
-            //staticList[i].
-        }
-        z = 0;
-    }
-    */
-
 }
 /*----------------------------------------------------------
  *          COM自动识别
@@ -176,7 +161,9 @@ void Serial::Serial_Connect_Success_Label_Text()
     serialStrList.clear();
     serialStrList = scanSerial();
     for(int z = 0;z < serialStrList.size();z++)
+    {
         qDebug()<<"链表1为"<<serialStrList[z];
+    }
     qDebug()<<"size:"<<serialStrList.size();
     //如果有新增的COM口，则scanSerial()会变为："COMx",这样将以前的字符串添加在新增的前面即可
     for(int i = 0;i<staticList.size();i++)
@@ -198,23 +185,23 @@ void Serial::Serial_Connect_Success_Label_Text()
             ui->portBox->addItem(staticList[i]); // 在comboBox那添加串口号
         }
     }
-    QFont font ( "已连接", 12, 70); //第一个属性是字体（微软雅黑），第二个是大小，第三个是加粗（权重是75）
+    QFont font ( "已发现", 12, 70); //第一个属性是字体（微软雅黑），第二个是大小，第三个是加粗（权重是75）
     ui->label_1->setFont(font);
     QPalette pe;
     pe.setColor(QPalette::WindowText,Qt::darkGreen);
     ui->label_1->setPalette(pe);
-    ui->label_1->setText("已连接");
+    ui->label_1->setText("已发现");
 }
 void Serial::Serial_Connect_NG_Label_Text()
 {
     ui->portBox->clear();//当所有串口都拔出是清空
     staticList.clear();
-    QFont font ( "等待中", 12, 70); //第一个属性是字体（微软雅黑），第二个是大小，第三个是加粗（权重是75）
+    QFont font ( "搜索中", 12, 70); //第一个属性是字体（微软雅黑），第二个是大小，第三个是加粗（权重是75）
     ui->label_1->setFont(font);
     QPalette pe;
     pe.setColor(QPalette::WindowText,Qt::red);
     ui->label_1->setPalette(pe);
-    ui->label_1->setText("等待中");
+    ui->label_1->setText("搜索中");
 }
 /*----------------------------------------------------------
  *          判定串口是否重复
@@ -235,7 +222,7 @@ QStringList Serial::scanSerial()
             {
                 judge++;
             }
-            qDebug()<<judge<<"key测试";
+//            qDebug()<<judge<<"key测试";
         }
         if(judge == 0)
         {
@@ -243,6 +230,36 @@ QStringList Serial::scanSerial()
         }     
     }
     return serialStrList;
+}
+/*----------------------------------------------------------
+ *          十六进制输入合法检查
+ *----------------------------------------------------------*/
+void Serial::validateHEX()
+{
+    QString text = ui->textEdit->toPlainText();		//获取QTextEdit中的纯文本
+    QTextCursor cur = ui->textEdit->textCursor();	//获取光标，默认获取的光标在最后
+    int pos = cur.position() - 1;	//QString索引从0开始，因此减1是为了获取最后一个位置的字符的索引
+    if(pos >= 0)	//pos为-1说明当前QTextEdit中没有文本
+    {
+//        qDebug() << text.at(pos);
+        QChar ch = text.at(pos);
+        if((ch >= '0' && ch <= '9')		//判断是否符合条件
+                || (ch >= 'A' && ch <= 'F')
+                || (ch >= 'a' && ch <= 'f')
+                || (ch == ' '))
+        {
+            return;
+        }
+        else
+        {
+            cur.deletePreviousChar();   //删除光标所在位置的前一个字符
+            QMessageBox messagebox(this);	//弹出提示框
+            messagebox.setWindowTitle("提示");
+            messagebox.setText("请输入16进制0-9,，A-F!\n按照AE 0D 3F 93的格式输入");
+            messagebox.addButton(new QPushButton("确定"), QMessageBox::AcceptRole);
+            messagebox.exec();  //阻塞GUI线程
+        }
+    }
 }
 /*----------------------------------------------------------
  *          slots
@@ -306,6 +323,9 @@ void Serial::ButtonOpenPort(bool)
             ui->DateBitsBox->setEnabled(false);
             ui->stopBitsBox->setEnabled(false);
             //ui->search_Button->setEnabled(false);
+            //使能发送按钮
+            ui->sendTxtButton->setEnabled(true);
+            ui->iapButton->setEnabled(true);
             //调整串口控制按钮的文字提示
             ui->openButton->setText(QString("关闭串口"));
         }
@@ -319,15 +339,34 @@ void Serial::ButtonOpenPort(bool)
             ui->DateBitsBox->setEnabled(true);
             ui->stopBitsBox->setEnabled(true);
             //ui->search_Button->setEnabled(true);
+            //失能发送按钮
+            ui->sendTxtButton->setEnabled(false);
+            ui->iapButton->setEnabled(false);
             //调整串口控制按钮的文字提示
             ui->openButton->setText(QString("打开串口"));
          }
 }
 void Serial::ButtonSendPort(bool)
 {
-    QString date = ui->textEdit->toPlainText();
-    QByteArray array = date.toLatin1();
-    globlePort.write(array);
+    QString dataStr = ui->textEdit->toPlainText();
+    if(dataStr.isEmpty())
+        return;
+
+    if(ui->checkBoxHexTx->isChecked() == false)
+    {
+
+        if(dataStr.indexOf("\n") != -1)
+        {
+            dataStr.replace("\n","\r\n");
+        }
+        QByteArray array = dataStr.toLatin1();
+        globlePort.write(array);
+    }
+    else
+    {
+        QByteArray array = QByteArray::fromHex(dataStr.toLatin1().data());
+        globlePort.write(array);
+    }
 }
 /*----------------------------------------------------------
  *          recive Date
@@ -337,14 +376,16 @@ void Serial::ReciveDate()
 {   
     static QByteArray Serial_buff;//定义static，否则会被清理
     Serial_buff += globlePort.readAll();
+    emit DataRecvSignal(Serial_buff);
+
     if(ui->pushButton_3->text() == QString("暂停显示"))
     {
         //判断标志结束
         if(ui->checkBoxHex->isChecked() == false)
         {
-            if(Serial_buff.endsWith("\n"))
+            if(Serial_buff.isEmpty() == false)
             {
-                qDebug()<<Serial_buff;
+//                qDebug()<<Serial_buff;
                 QString string = QString::fromLocal8Bit(Serial_buff);//中文字符输出
                 ui->textBrowser->insertPlainText(string);
                 Serial_buff.clear();//数据清理
@@ -352,7 +393,7 @@ void Serial::ReciveDate()
         }
         else if(ui->checkBoxHex->isChecked() == true)
         {
-            if(Serial_buff.endsWith("\n"))
+            if(Serial_buff.isEmpty() == false)
             {
                 QString strDis;
                 QByteArray hexData = Serial_buff.toHex();
@@ -375,3 +416,23 @@ void Serial::ReciveDate()
         Serial_buff.clear();
     }
 }
+
+void Serial::on_checkBoxHexTx_stateChanged(int arg1)
+{
+    ui->textEdit->clear();
+    if(arg1 == 0)
+    {
+        disconnect(ui->textEdit, &QTextEdit::textChanged, this, &Serial::validateHEX);
+    }
+    else if (arg1 == 2)
+    {
+        connect(ui->textEdit, &QTextEdit::textChanged, this, &Serial::validateHEX);
+    }
+}
+
+
+void Serial::on_iapButton_clicked()
+{
+    emit iapWidgetOpen();
+}
+
