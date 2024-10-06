@@ -54,6 +54,5 @@ private:
     Ui::Serial *ui;//ui对象
     QSerialPort globlePort;//串口对象
     QStringList serialStrList;//为实现scanSerial()而定义的，串口字符串链
-
 };
 #endif // SERIAL_H

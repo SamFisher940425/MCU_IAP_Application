@@ -20,14 +20,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     compilerport.cpp \
     main.cpp \
+    ota_widget.cpp \
     serial.cpp
 
 HEADERS += \
     compilerport.h \
     include.h \
+    ota_widget.h \
     serial.h
 
 FORMS += \
+    ota_widget.ui \
     serial.ui
 
 TRANSLATIONS += \

@@ -9,7 +9,7 @@ Serial::Serial(QWidget *parent)
 {
     ui->setupUi(this);
     //用户添加
-    Serial::setWindowTitle(tr("  串口调试助手V1.0 —— Adma 庄           个人网站：www.gudaobian.top"));
+    Serial::setWindowTitle(tr("MCU_IAP_Assistant"));
     Timer0_Init();
     Timer1_Init();
     systemInit();
@@ -37,7 +37,6 @@ void Serial::systemInit()
     connect(ui->checkBox,&QCheckBox::stateChanged,this,&Serial::AutoClear);//自动清除
 
     connect(&globlePort, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),  this, &Serial::handleSerialError);
-    //connect(ui->checkBox_2,&QCheckBox::stateChanged,this,&Serial::ButtonClear);//16进制信号
 }
 void Serial::handleSerialError(QSerialPort::SerialPortError error)
 {
