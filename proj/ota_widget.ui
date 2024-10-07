@@ -55,12 +55,12 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="infoLabel">
    <property name="geometry">
     <rect>
-     <x>250</x>
+     <x>200</x>
      <y>500</y>
-     <width>100</width>
+     <width>200</width>
      <height>25</height>
     </rect>
    </property>
@@ -89,7 +89,7 @@
      </widget>
     </item>
     <item row="0" column="1" colspan="2">
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="headLineEdit">
       <property name="text">
        <string>55 AA</string>
       </property>
@@ -103,7 +103,7 @@
      </widget>
     </item>
     <item row="1" column="1" colspan="2">
-     <widget class="QLineEdit" name="lineEdit_2">
+     <widget class="QLineEdit" name="srcID_LineEdit">
       <property name="text">
        <string>00</string>
       </property>
@@ -117,42 +117,42 @@
      </widget>
     </item>
     <item row="2" column="1" colspan="2">
-     <widget class="QLineEdit" name="lineEdit_3">
+     <widget class="QLineEdit" name="dstID_LineEdit">
       <property name="text">
        <string>01</string>
       </property>
      </widget>
     </item>
     <item row="5" column="0">
-     <widget class="QLabel" name="label_5">
+     <widget class="QLabel" name="label_7">
       <property name="text">
        <string>帧尾(HEX)</string>
       </property>
      </widget>
     </item>
     <item row="5" column="1" colspan="2">
-     <widget class="QLineEdit" name="lineEdit_4">
+     <widget class="QLineEdit" name="tailLineEdit">
       <property name="text">
        <string>0D 0A</string>
       </property>
      </widget>
     </item>
     <item row="3" column="0">
-     <widget class="QLabel" name="label_6">
+     <widget class="QLabel" name="label_5">
       <property name="text">
        <string>功能码字节数</string>
       </property>
      </widget>
     </item>
     <item row="4" column="0">
-     <widget class="QLabel" name="label_7">
+     <widget class="QLabel" name="label_6">
       <property name="text">
        <string>数据长度字节数</string>
       </property>
      </widget>
     </item>
     <item row="3" column="1" colspan="2">
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="funcCodeLenComboBox">
       <item>
        <property name="text">
         <string>1</string>
@@ -166,7 +166,7 @@
      </widget>
     </item>
     <item row="4" column="1" colspan="2">
-     <widget class="QComboBox" name="comboBox_2">
+     <widget class="QComboBox" name="dataLenLenComboBox">
       <item>
        <property name="text">
         <string>1</string>
@@ -184,9 +184,9 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>410</x>
+     <x>390</x>
      <y>220</y>
-     <width>116</width>
+     <width>176</width>
      <height>32</height>
     </rect>
    </property>
@@ -194,14 +194,14 @@
     <item row="0" column="0">
      <widget class="QLabel" name="label_8">
       <property name="text">
-       <string>文件大小(Byte)：</string>
+       <string>文件大小(HEX Byte)：</string>
       </property>
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QLabel" name="label_10">
+     <widget class="QLabel" name="fileSizeLabel">
       <property name="text">
-       <string>00</string>
+       <string>00000000</string>
       </property>
      </widget>
     </item>
@@ -213,9 +213,9 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLabel" name="label_11">
+     <widget class="QLabel" name="crcResultLabel">
       <property name="text">
-       <string>00</string>
+       <string>0000</string>
       </property>
      </widget>
     </item>
