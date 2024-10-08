@@ -179,6 +179,8 @@ void ota_widget::timer0_task()
         if (offset > offset_last)
         {
             ui->infoLabel->setText("刷写中...");
+            int percent = (int)(offset * 100.0F / fileSize);
+            ui->progressBar->setValue(percent);
             sendBuf.clear();
             sendBuf.append(head);
             sendBuf.append(src_id);
@@ -365,6 +367,7 @@ void ota_widget::timer0_task()
         emit DataSendSignal(sendBuf);
         textBrowserAppend(sendBuf,1);
         ui->textBrowser->append("升级完成，复位中...");
+        ui->progressBar->setValue(100);
         reply_state = 0;
         wait_cnt = 0;
         iap_step++;
@@ -429,6 +432,7 @@ void ota_widget::on_fileSelectButton_clicked()
     fileData = file.readAll();
     fileSize = file.size();
     crcResult = Calc_CRC16(fileData.data(),fileSize);
+    file.close();
 
     QDataStream sizeStream(&fileSize_arrry,QIODevice::WriteOnly);
     sizeStream.setByteOrder(QDataStream::LittleEndian);
@@ -479,5 +483,36 @@ void ota_widget::on_dataLenLenComboBox_currentIndexChanged(int index)
 void ota_widget::on_tailLineEdit_textChanged(const QString &arg1)
 {
     tail = QByteArray::fromHex(arg1.toLatin1().data());
+}
+
+
+void ota_widget::on_buttonBox_clicked(QAbstractButton *button)
+{
+    timer0->stop();
+    iap_step = 0;
+    reply_state = 0;
+    ui->infoLabel->setText("请设定IAP参数");
+    ui->startButton->setEnabled(false);
+
+    fileData.clear();
+    fileSize = 0;
+    fileSize_arrry.clear();
+    crcResult = 0;
+    crcResult_array.clear();
+    sendBuf.clear();
+
+    ui->fileNameLineEdit->clear();
+    binFileName.clear();
+    ui->fileSizeLabel->setText("00000000");
+    ui->crcResultLabel->setText("0000");
+    ui->textBrowser->clear();
+
+    ui->headLineEdit->setEnabled(true);
+    ui->srcID_LineEdit->setEnabled(true);
+    ui->dstID_LineEdit->setEnabled(true);
+    ui->funcCodeLenComboBox->setEnabled(true);
+    ui->dataLenLenComboBox->setEnabled(true);
+    ui->tailLineEdit->setEnabled(true);
+    ui->progressBar->setValue(0);
 }
 

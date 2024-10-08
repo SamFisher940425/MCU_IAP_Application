@@ -2,6 +2,7 @@
 #define OTA_WIDGET_H
 
 #include <QDialog>
+#include "QAbstractButton"
 
 namespace Ui {
 class ota_widget;
@@ -40,6 +41,8 @@ private slots:
     void on_dataLenLenComboBox_currentIndexChanged(int index);
 
     void on_tailLineEdit_textChanged(const QString &arg1);
+
+    void on_buttonBox_clicked(QAbstractButton *button);
 
 private:
     Ui::ota_widget *ui;

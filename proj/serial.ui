@@ -537,6 +537,9 @@ padding:0 1px;
         <property name="text">
          <string>十六进制显示</string>
         </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
