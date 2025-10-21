@@ -25,7 +25,6 @@ SOURCES += \
 
 HEADERS += \
     compilerport.h \
-    include.h \
     ota_widget.h \
     serial.h
 

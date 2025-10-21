@@ -1,5 +1,6 @@
 #include "serial.h"
 #include "ota_widget.h"
+#include "compilerport.h"
 
 #include <QApplication>
 

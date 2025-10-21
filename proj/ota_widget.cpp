@@ -1,10 +1,10 @@
-#include "ota_widget.h"
-#include "ui_ota_widget.h"
-#include "QFileDialog"
-#include "QFile"
-#include "QMessageBox"
-#include "QTimer"
-#include "QDataStream"
+#include <ota_widget.h>
+#include <ui_ota_widget.h>
+#include <QFileDialog>
+#include <QFile>
+#include <QMessageBox>
+#include <QTimer>
+#include <QDataStream>
 
 ota_widget::ota_widget(QWidget *parent) :
     QDialog(parent),

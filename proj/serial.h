@@ -2,7 +2,18 @@
 #define SERIAL_H
 
 #include <QMainWindow>
-#include <include.h>
+#include <QSerialPort>
+#include <QtDebug>
+#include <QtSerialPort/QSerialPortInfo>
+#include <QTextCodec>
+#include <QTimer>
+#include <QMessageBox>
+#include <QPainter>
+#include <QBitmap>
+#include <QBrush>
+#include "ui_serial.h"
+#include "compilerport.h"
+#include "ota_widget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Serial; }

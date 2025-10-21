@@ -2,7 +2,8 @@
 #define OTA_WIDGET_H
 
 #include <QDialog>
-#include "QAbstractButton"
+#include <QSemaphore>
+#include <QAbstractButton>
 
 namespace Ui {
 class ota_widget;

@@ -1,4 +1,16 @@
-#include "include.h"
+#include <QSerialPort>
+#include <QtDebug>
+#include <QtSerialPort/QSerialPortInfo>
+#include <QTextCodec>
+#include <QTimer>
+#include <QMessageBox>
+#include <QPainter>
+#include <QBitmap>
+#include <QBrush>
+#include "compilerport.h"
+#include "serial.h"
+#include "ota_widget.h"
+#include "ui_serial.h"
 
 CompilerPort::CompilerPort()
 {

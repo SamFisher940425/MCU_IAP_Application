@@ -3,7 +3,6 @@
 
 
 #include <QStringList>
-
 #include <QDebug>
 
 class CompilerPort
